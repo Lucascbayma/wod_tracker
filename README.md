@@ -15,6 +15,7 @@ Data, tipo de treino (AMRAP, EMOM, For Time...), duração e movimentos (separad
 -Arquivos criados:
 
 treinos.txt: Armazena os seus treinos;
+
 metas.txt: Guarda suas metas de performance!
 
 Regras de uso:
