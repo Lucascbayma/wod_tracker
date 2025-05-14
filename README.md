@@ -12,10 +12,9 @@ Regras gerais de uso:
 
 Data, tipo de treino (AMRAP, EMOM, For Time...), duração e movimentos (separados por vírgula).
 
-Arquivos criados:
+-Arquivos criados:
 
 treinos.txt: Armazena os seus treinos;
-
 metas.txt: Guarda suas metas de performance!
 
 Regras de uso:
