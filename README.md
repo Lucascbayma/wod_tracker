@@ -1,2 +1,4 @@
 # WOD TRACKER
-Esse é o arquivo do nosso projeto!
+Aqui está armazenado os principais arquivos do nosso projeto!
+
+-Arquivo principal: wod.py
