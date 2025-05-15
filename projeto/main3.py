@@ -139,7 +139,6 @@ def registrar_meta():
         f.write(meta + "\n")
     print("Sua meta foi registrada!")
 
-import random    
     
 import random    
     
