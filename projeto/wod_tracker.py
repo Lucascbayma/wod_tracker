@@ -26,11 +26,11 @@ def validar_tipo(tipo):
 def validar_movimentos(movimentos):
     if not movimentos or ',' not in movimentos:
         return False
-    # Verifica se contém apenas letras, espaços e vírgulas
+    # Verificar se contém apenas letras, espaços e vírgulas
     for char in movimentos:
         if not (char.isalpha() or char == ' ' or char == ','):
             return False
-    # Verifica se cada movimento não está vazio
+    # Verificar se cada movimento não está vazio
     mov_list = [mov.strip() for mov in movimentos.split(',')]
     return all(mov for mov in mov_list)
 
@@ -61,7 +61,7 @@ def save_treinos(treinos):
 def add_treino():
     data = tipo = tempo = movimentos = None
     
-    # Validação da data
+    # Validar a data
     while True:
         data_input = input("Data do treino (dd/mm/aaaa): ")
         if validar_data(data_input):
@@ -69,7 +69,7 @@ def add_treino():
             break
         print("Data inválida. Tente novamente.")
     
-    # Validação do tipo
+    # Validar o tipo
     while True:
         tipo_input = input("Tipo de treino (AMRAP, EMOM, For Time): ").upper()
         if validar_tipo(tipo_input):
@@ -77,7 +77,7 @@ def add_treino():
             break
         print("Tipo inválido. Tente novamente.")
     
-    # Validação do tempo
+    # Validar o tempo
     while True:
         tempo_input = input("Tempo em minutos (ou For Time): ")
         if validar_tempo(tempo_input, tipo):
@@ -85,7 +85,7 @@ def add_treino():
             break
         print("Tempo inválido. Tente novamente.")
     
-    # Validação dos movimentos
+    # Validar os movimentos
     while True:
         movimentos_input = input("Movimentos (separe por vírgulas): ")
         if validar_movimentos(movimentos_input):
@@ -93,7 +93,7 @@ def add_treino():
             break
         print("Movimentos inválidos. Tente novamente.")
     
-    # Verifica se o treino já existe
+    # Verificar se o treino já existe
     treino = {"data": data, "tipo": tipo, "tempo": tempo, "movimentos": movimentos}
     treinos = carregar_treinos()
     treinos.append(treino)
@@ -105,7 +105,7 @@ def visu_treinos():
     if not treinos:
         print("Você não tem nenhum treino registrado.")
     for i, t in enumerate(treinos, 1):
-        print(f"{i}. {t['data']} | {t['tipo']} | {t['tempo']} | Movimentos: {t['movimentos']}")
+        print(f"{i}. {t['data']} | {t['tipo']} | {t['tempo']} minutos | Movimentos: {t['movimentos']}")
 
 def remover_treino():
     visu_treinos()
@@ -160,9 +160,15 @@ def registrar_meta():
 cont+=1
 
 def ver_metas():
-    for i in range (cont):
-        ARQUIVO_METAS=open("metas.txt", "r", encoding="utf8")
-        print(ARQUIVO_METAS.readlines())
+    try:
+        with open(ARQUIVO_METAS, "r", encoding="utf-8") as f:
+            metas=f.readlines()
+            if not metas:
+                print("Nenhuma meta foi registrada!")
+            for i, meta in enumerate(metas, 1):
+                print(f"{i}. {meta.strip()}")
+    except:
+        print("Nenhuma meta registrada.")
     
 import random    
     
@@ -171,23 +177,43 @@ def sugestao_wod():
     categorias = ["AMRAP", "EMOM", "For time"]
     movimentos_base = ["burpee", "snatch", "clean", "push-up", "pull-up", "air squat", "lunges", "kettlebell swing"]
 
-    categoria = random.choice(categorias) #escolha de um elemento aleatório de categoria  (.choice)                  categoria == categorias
+    categoria = random.choice(categorias) 
     if categoria != "For Time":
-        tempo = f"{random.randint(5, 20)} minutos" #.randint --> Escolhe aleatoriamente um número inteiro entre 5 e 20, incluindo o 5 e o 20. 
+        tempo = f"{random.randint(5, 20)} minutos" 
     else:
         tempo = "For Time"
 
-    movimentos = ", ".join(random.sample(movimentos_base, 3))    #escolha de  3 movimentos diferentes aleatórios da lista 
+    movimentos = ", ".join(random.sample(movimentos_base, 3)) 
 
     print(f"\nSugestão de WOD:")
     print(f"Categoria: {categoria}")
     print(f"Tempo: {tempo}")
     print(f"Movimentos: {movimentos}")
 
+def pos_treino():
+    
+    print("\n----- MENU WOD TRACKER -----")
+    print("Digite qual foi o tipo do seu treino para receber um pós-treino adequado!", "\n")
+    print("1-AMRAP", "2-EMOM", "3-For Time\n")
+    try:
+        tipo = int(input("Escolha o seu tipo de treino: "))
+
+        if tipo == 1:
+            print("Opte por carnes magras, ovos, carboidratos complexos e água!")
+        elif tipo == 2:
+            print("Opte por frango, peixes, carboidratos complexos e água!")
+        elif tipo == 3:
+            print("Opte por frango, ovos, quejos, frutas, carboidratos e água!")
+        else:
+            print("Opção de treino inválida.")
+    except ValueError:
+        print("Digite apenas números!")
+
+
 def menu():
     while True:
         print("\n----- MENU WOD TRACKER -----")
-        print(" 1-Adicionar treino\n 2-Visualizar treino(s)\n 3-Editar treino\n 4-Remover treino\n 5-Filtrar treinos\n 6-Registrar meta\n 7-Ver metas\n 8-Sugerir WOD\n 0-Sair")
+        print(" 1-Adicionar treino\n 2-Visualizar treino(s)\n 3-Editar treino\n 4-Remover treino\n 5-Filtrar treinos\n 6-Registrar meta\n 7-Ver metas\n 8-Sugerir WOD\n 9-Pós-treino\n 0-Sair")
         try:
             n = int(input("Escolha uma das opções acima: "))
             if n == 1:
@@ -206,6 +232,8 @@ def menu():
                 ver_metas()
             elif n == 8:
                 sugestao_wod()
+            elif n== 9:
+                pos_treino()
             else:
                 print("Essa opção não existe!")
             
@@ -216,42 +244,10 @@ def menu():
                     break
                 elif opcao == 'sair':
                     print("Seu programa foi encerrado com sucesso!")
-                    return  # Sai da função menu, encerrando o programa
+                    return  
                 else:
                     print("Opção inválida digite novamente")
         except ValueError:
             print("Digite apenas números!")
 
 menu()
-
-def pos_treino():
-    while True:
-        print("\n----- MENU WOD TRACKER -----")
-        print("Digite o seu tipo de treino para receber o melhor pós-treino", "\n")
-        print("1 - AMRAP", "2 - EMOM", "3 - For Time")
-        try:
-            tipo = int(input("Escolha o seu tipo de treino: "))
-
-            if tipo == 1:
-                print("Opte por carnes magras, ovos, carboidratos complexos e água")
-            elif tipo == 2:
-                print("Opte por frango, peixes, carboidratos complexos e água")
-            elif tipo == 3:
-                print("Opte por frango, ovos, quejos, frutas, carboidratos e água")
-            else:
-                print("Opção de treino inválida")
-            
-            while True:
-                opcao = input("\nVocê deseja continuar ou sair? ").lower()
-                if opcao == 'continuar':
-                    print('continuando...')
-                    break
-                elif opcao == 'sair':
-                    print("Seu programa foi encerrado com sucesso!")
-                    return  # Sai da função pos_treino
-                else:
-                    print("Opção inválida digite novamente")
-        except ValueError:
-            print("Digite apenas números!")
-
-pos_treino()
