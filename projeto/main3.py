@@ -1,4 +1,5 @@
 treino = []
+cont=0
 ARQUIVO_TREINOS = "treinos.txt"
 ARQUIVO_METAS = "metas.txt"
 
@@ -54,7 +55,7 @@ def carregar_treinos():
 def save_treinos(treinos):
     with open(ARQUIVO_TREINOS, "w") as lista:
         for t in treinos:
-            linha = f"{t['Data']}|{t['Tipo']}|{t['Tempo']}|{t['Movimentos']}\n"
+            linha = f"{t['data']}|{t['tipo']}|{t['tempo']}|{t['movimentos']}\n"
             lista.write(linha)
 
 def add_treino():
@@ -76,7 +77,7 @@ def add_treino():
         return
     # Verifica se o treino já existe
     
-    treino = {"Data": data, "Tipo": tipo, "Tempo": tempo, "Movimentos": movimentos}
+    treino = {"data": data, "tipo": tipo, "tempo": tempo, "movimentos": movimentos}
     treinos = carregar_treinos()
     treinos.append(treino)
     save_treinos(treinos)
@@ -137,8 +138,14 @@ def registrar_meta():
     meta = input("Digite sua meta: ")
     with open(ARQUIVO_METAS, "a", encoding="utf-8") as f:
         f.write(meta + "\n")
+        
     print("Sua meta foi registrada!")
+cont+=1
 
+def ver_metas():
+    for i in range (cont):
+        ARQUIVO_METAS=open("metas.txt", "r", encoding="utf8")
+        print(ARQUIVO_METAS.readlines())
     
 import random    
     
@@ -178,6 +185,8 @@ def menu():
                 filtrar_treinos()
             elif n == 6:
                 registrar_meta()
+            elif n==7:
+                ver_metas()
             elif n==8:
                 sugestao_wod()
             else:
@@ -216,4 +225,3 @@ def pos_treino():
         except ValueError:
             print("Digite apenas números!")
 pos_treino()
-
