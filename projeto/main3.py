@@ -54,7 +54,7 @@ def carregar_treinos():
 def save_treinos(treinos):
     with open(ARQUIVO_TREINOS, "w") as lista:
         for t in treinos:
-            linha = f"{t['data']}|{t['tipo']}|{t['tempo']}|{t['movimentos']}\n"
+            linha = f"{t['Data']}|{t['Tipo']}|{t['Tempo']}|{t['Movimentos']}\n"
             lista.write(linha)
 
 def add_treino():
@@ -76,7 +76,7 @@ def add_treino():
         return
     # Verifica se o treino já existe
     
-    treino = {"data": data, "tipo": tipo, "tempo": tempo, "movimentos": movimentos}
+    treino = {"Data": data, "Tipo": tipo, "Tempo": tempo, "Movimentos": movimentos}
     treinos = carregar_treinos()
     treinos.append(treino)
     save_treinos(treinos)
