@@ -16,7 +16,7 @@ Data, tipo de treino (AMRAP, EMOM, For Time), duração e movimentos (separados 
 
 -*Observações*:
 
-1- Você pode desfrutar de diversas funcionalidades, tais como:
+Você pode desfrutar de diversas funcionalidades! tais como:
 
 -Editar ou remover treinos passados.
 
@@ -24,9 +24,9 @@ Data, tipo de treino (AMRAP, EMOM, For Time), duração e movimentos (separados 
 
 -Criar e ver suas metas, acompanhando sua progressão.
 
--Pedir sugestões de WOD
+-Pedir sugestões de WOD.
 
--Além de pedir uma dica de pós-treino baseada no tipo do treino (AMRAP, EMOM, For Time). Um funcionamento extra que vai fortalecer ainda mais o seu treino.
+-Além de receber uma dica de pós-treino baseada no tipo do treino (AMRAP, EMOM, For Time). Um funcionamento extra que vai fortalecer ainda mais o seu treino.
 
 -Arquivos criados:
 
