@@ -14,7 +14,7 @@ Data, tipo de treino (AMRAP, EMOM, For Time), duração e movimentos (separados 
 
 3-Veja seus treinos anteriores!
 
--*Observações*
+-*Observações*:
 
 1- Você pode desfrutar de diversas funcionalidades, tais como:
 
