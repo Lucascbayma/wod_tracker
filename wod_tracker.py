@@ -93,7 +93,6 @@ def add_treino():
             break
         print("Movimentos inválidos. Tente novamente.")
     
-    # Verificar se o treino já existe
     treino = {"data": data, "tipo": tipo, "tempo": tempo, "movimentos": movimentos}
     treinos = carregar_treinos()
     treinos.append(treino)
@@ -119,59 +118,103 @@ def remover_treino():
         print("Índice inválido.")
 
 def editar_treino():
-    visu_treinos()
-    i = int(input("Digite o número do treino para editar: "))-1
     treinos = carregar_treinos()
+    if not treinos:
+        print("Você ainda não tem treinos registrados para editar.")
+        return
+    visu_treinos()
+    
+    try:
+        i = int(input("Digite o número do treino para editar: ")) - 1
+    except ValueError:
+        print("Entrada inválida. Digite um número.")
+        return
+
     if 0 <= i < len(treinos):
+        treino = treinos[i]
         print("Deixe vazio para manter o valor atual.")
-        novo_tipo = input("Novo tipo: ")
-        novo_tempo = input("Novo tempo: ")
-        novos_mov = input("Novos movimentos: ")
+        print(f"Tipo atual: {treino['tipo']}")
+        novo_tipo = input("Novo tipo (AMRAP, EMOM, FOR TIME): ").strip().upper()
         if novo_tipo:
-            treinos[i]['tipo'] = novo_tipo.upper()
+            if validar_tipo(novo_tipo):
+                treino['tipo'] = novo_tipo
+            else:
+                print("Tipo inválido. O tipo de treino não foi alterado.")
+        print(f"Tempo atual: {treino['tempo']}")
+        novo_tempo = input("Novo tempo: ").strip()
         if novo_tempo:
-            treinos[i]['tempo'] = novo_tempo
+            if validar_tempo(novo_tempo, treino['tipo']):
+                treino['tempo'] = novo_tempo
+            else:
+                print("Tempo inválido. Mantido valor anterior.")
+        print(f"Movimentos atuais: {treino['movimentos']}")
+        novos_mov = input("Novos movimentos (separe por vírgulas): ").strip()
         if novos_mov:
-            treinos[i]['movimentos'] = novos_mov
+            if validar_movimentos(novos_mov):
+                treino['movimentos'] = novos_mov
+            else:
+                print("Movimentos inválidos. Mantido valor anterior.")
         save_treinos(treinos)
         print("O seu treino foi editado!")
     else:
         print("Índice inválido.")
 
 def filtrar_treinos():
-    tipo = input("Filtrar por tipo (ex: AMRAP): ").upper()
-    movimento = input("Filtrar por movimento (ex: snatch): ").lower()
+    print("\nComo você deseja filtrar?\n")
+    print("1-Filtrar por tipo de treino")
+    print("2-Filtrar por movimento")
+    print("3-Filtrar por tipo ou movimento")
+
+    opcao = input("Escolha a opção de filtro: ").strip()
     treinos = carregar_treinos()
     encontrados = []
-    for t in treinos:
-        if (not tipo or t['tipo'] == tipo) and (not movimento or movimento in t['movimentos'].lower()):
-            encontrados.append(t)
+
+    if opcao == "1":
+        tipo = input("Digite o tipo de treino (AMRAP, EMOM, FOR TIME): ").upper().strip()
+        for t in treinos:
+            if t['tipo'] == tipo:
+                encontrados.append(t)
+    elif opcao == "2":
+        movimento = input("Digite o nome do movimento (ex: pull-up): ").lower().strip()
+        for t in treinos:
+            if movimento in t['movimentos'].lower():
+                encontrados.append(t)
+    elif opcao == "3":
+        tipo = input("Digite o tipo de treino (AMRAP, EMOM, FOR TIME): ").upper().strip()
+        movimento = input("Digite o nome do movimento (ex: snatch): ").lower().strip()
+        for t in treinos:
+            if tipo == t['tipo'] or movimento in t['movimentos'].lower():
+                encontrados.append(t)
+    else:
+        print("Opção inválida.")
+        return
+
     if not encontrados:
-        print("Nenhum treino encontrado.")
-    for t in encontrados:
-        print(f"{t['data']} | {t['tipo']} | {t['tempo']} | Movimentos: {t['movimentos']}")
+        print("Nenhum treino encontrado com esse filtro.")
+    else:
+        print("\n--- TREINOS ENCONTRADOS ---")
+        for t in encontrados:
+            print(f"{t['data']} | {t['tipo']} | {t['tempo']} minutos | Movimentos: {t['movimentos']}")
 
 def registrar_meta():
     meta = input("Digite sua meta: ")
     with open(ARQUIVO_METAS, "a", encoding="utf-8") as f:
         f.write(meta + "\n")
-        
     print("Sua meta foi registrada!")
 cont+=1
 
-def ver_metas():
-    try:
-        with open(ARQUIVO_METAS, "r", encoding="utf-8") as f:
-            metas=f.readlines()
-            if not metas:
-                print("Nenhuma meta foi registrada!")
-            for i, meta in enumerate(metas, 1):
-                print(f"{i}. {meta.strip()}")
-    except:
-        print("Nenhuma meta registrada.")
+def ver_meta():
+    with open(ARQUIVO_METAS, "r", encoding="utf-8") as f:
+        metas=f.readlines()
+        if not metas:
+            print("Nenhuma meta foi registrada!")
+            return
+        for i, meta in enumerate(metas, 1):
+            print("\n--- METAS REGISTRADAS ---")
+            print(f"{i}. {meta.strip()}")
     
-import random    
-    
+import random  
+
 def sugestao_wod():
    
     categorias = ["AMRAP", "EMOM", "For time"]
@@ -179,20 +222,20 @@ def sugestao_wod():
 
     categoria = random.choice(categorias) 
     if categoria != "For Time":
-        tempo = f"{random.randint(5, 20)} minutos" 
+        tempo = f"{random.randint(5, 20)} minutos"
     else:
         tempo = "For Time"
 
     movimentos = ", ".join(random.sample(movimentos_base, 3)) 
 
-    print(f"\nSugestão de WOD:")
+    print(f"\n--- SUGESTÃO DE WOD ---")
     print(f"Categoria: {categoria}")
     print(f"Tempo: {tempo}")
     print(f"Movimentos: {movimentos}")
 
 def pos_treino():
     
-    print("\n----- MENU WOD TRACKER -----")
+    print("\n---- PÓS-TREINO WOD TRACKER ----")
     print("Digite qual foi o tipo do seu treino para receber um pós-treino adequado!", "\n")
     print("1-AMRAP", "2-EMOM", "3-For Time\n")
     try:
@@ -209,11 +252,31 @@ def pos_treino():
     except ValueError:
         print("Digite apenas números!")
 
+def progresso_metas():
+    try:
+        with open(ARQUIVO_METAS, "r", encoding="utf-8") as f:
+            metas = [meta.strip().lower() for meta in f.readlines()]
+    except:
+        print("Nenhuma meta foi registrada.")
+        return
+
+    treinos = carregar_treinos()
+    historico = " ".join([t['movimentos'].lower() + " " + t['tempo'].lower() for t in treinos])
+
+    print("\n--- PROGRESSO DE METAS ---")
+    for meta in metas:
+        palavras_meta = meta.split()
+        progresso = any(p in historico for p in palavras_meta)
+        if progresso:
+            status = "Em progresso!"
+        else:
+            status = "Ainda não foi iniciado..."
+        print(f"Meta: {meta} -> {status}")
 
 def menu():
     while True:
         print("\n----- MENU WOD TRACKER -----")
-        print(" 1-Adicionar treino\n 2-Visualizar treino(s)\n 3-Editar treino\n 4-Remover treino\n 5-Filtrar treinos\n 6-Registrar meta\n 7-Ver metas\n 8-Sugerir WOD\n 9-Pós-treino\n 0-Sair")
+        print(" 1-Adicionar treino\n 2-Visualizar treino(s)\n 3-Editar treino\n 4-Remover treino\n 5-Filtrar treinos\n 6-Registrar meta\n 7-Ver metas\n 8-Progresso de metas\n 9-Sugestão de WOD\n 10-Pós-treino\n 0-Sair")
         try:
             n = int(input("Escolha uma das opções acima: "))
             if n == 1:
@@ -229,11 +292,16 @@ def menu():
             elif n == 6:
                 registrar_meta()
             elif n == 7:
-                ver_metas()
+                ver_meta()
             elif n == 8:
+                progresso_metas()
+            elif n == 9:
                 sugestao_wod()
-            elif n== 9:
+            elif n == 10:
                 pos_treino()
+            elif n == 0:
+                print("Seu programa foi encerrado com sucesso!")
+                break 
             else:
                 print("Essa opção não existe!")
             
@@ -246,8 +314,7 @@ def menu():
                     print("Seu programa foi encerrado com sucesso!")
                     return  
                 else:
-                    print("Opção inválida digite novamente")
+                    print("Opção inválida, digite novamente.")
         except ValueError:
             print("Digite apenas números!")
-
 menu()
